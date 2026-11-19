@@ -1,0 +1,21 @@
+/* TRON — mobile.css: solo aplica en dispositivos táctiles (html.touch) */
+#touch-ui { display: none; }
+html.touch, html.touch body { touch-action: none; overscroll-behavior: none; -webkit-user-select: none; user-select: none; }
+html.touch #touch-ui { display: block; position: fixed; inset: 0; z-index: 60; pointer-events: none; }
+html.touch #touch-ui button, html.touch #tj-base { pointer-events: auto; }
+#tj-base { position: absolute; left: max(22px, env(safe-area-inset-left)); bottom: 22px; width: 132px; height: 132px; border-radius: 50%; border: 2px solid rgba(0,212,255,.55); background: radial-gradient(circle, rgba(0,212,255,.10), rgba(0,0,0,.25)); box-shadow: 0 0 18px rgba(0,212,255,.25); touch-action: none; }
+#tj-knob { position: absolute; left: 50%; top: 50%; width: 62px; height: 62px; margin: -31px 0 0 -31px; border-radius: 50%; background: rgba(0,212,255,.35); border: 2px solid #8ff; box-shadow: 0 0 14px #19f0ff; }
+#tb-right { position: absolute; right: max(14px, env(safe-area-inset-right)); bottom: 16px; display: grid; grid-template-columns: repeat(3, 50px); gap: 6px; align-items: center; justify-items: center; }
+.tb { min-width: 50px; height: 44px; padding: 0 8px; border: 2px solid rgba(0,212,255,.6); background: rgba(2,10,16,.62); color: #cffaff; font: 700 12px Orbitron, sans-serif; letter-spacing: .06em; border-radius: 12px; touch-action: none; } .tb.on { background: rgba(0,212,255,.45); color: #fff; }
+.tb.big { grid-column: span 3; width: 100%; height: 56px; font-size: 15px; border-color: #FFD84A; color: #FFD84A; } .tb.sm { min-width: 42px; height: 36px; font-size: 13px; padding: 0 6px; }
+#tb-top { position: absolute; top: 6px; left: 50%; transform: translateX(-50%); display: flex; gap: 5px; z-index: 5; } #tb-top .tb { height: 32px; font-size: 11px; } #tb-items { position: absolute; left: max(26px, env(safe-area-inset-left)); bottom: 162px; display: flex; gap: 5px; } #tb-items .tb { min-width: 34px; height: 30px; font-size: 12px; padding: 0 4px; }
+html.touch #intro-skip { bottom: 70px; }
+@media (pointer: coarse), (max-width: 900px) {
+    html.touch #hud-left { transform: scale(.78); transform-origin: top left; top: 44px; }
+    html.touch #hud-right { transform: scale(.55); transform-origin: top right; top: 44px; }
+    html.touch #quest-tracker, html.touch #ability-bar { display: none; }
+    html.touch #items-bar { display: none; }
+    html.touch #toast-container { top: 44px; font-size: 12px; }
+    html.touch .modal .box { max-height: 92vh; overflow-y: auto; width: 94vw; }
+    html.touch #interact-prompt { bottom: 200px; }
+}

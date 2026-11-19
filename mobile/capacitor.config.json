@@ -1,0 +1,1 @@
+{ "appId": "com.tron.lasgrids", "appName": "TRON Las Grids", "webDir": "www", "server": { "androidScheme": "https", "cleartext": true }, "android": { "allowMixedContent": true } }

@@ -1,0 +1,6 @@
+# El servidor usa SOLO la biblioteca estándar de Python 3.9+. No hace falta instalar nada
+# para usar las IA en la nube (Claude, Gemini, DeepSeek/OpenAI...).
+#
+# Solo si quieres la IA LOCAL (sin internet, sin claves):
+#   llama-cpp-python
+# (en Windows sin compilador:  pip install llama-cpp-python --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cpu )

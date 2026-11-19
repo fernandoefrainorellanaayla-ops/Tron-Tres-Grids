@@ -1,0 +1,5 @@
+# Copia como server/config.local.sh y descomenta UNA línea. iniciar.sh lo carga solo.
+# export GEMINI_API_KEY="pega_aqui_tu_clave"
+# export ANTHROPIC_API_KEY="pega_aqui_tu_clave"
+# export DEEPSEEK_API_KEY="pega_aqui_tu_clave"
+# export OPENAI_API_KEY="pega_aqui_tu_clave"
