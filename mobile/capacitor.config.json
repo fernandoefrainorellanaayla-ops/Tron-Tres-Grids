@@ -1,0 +1,3 @@
+{ "appId": "com.tron.lasgrids", "appName": "TRON Las Grids", "webDir": "www", "backgroundColor": "#02080e",
+  "server": { "androidScheme": "https", "cleartext": true }, "android": { "allowMixedContent": true },
+  "plugins": { "SplashScreen": { "launchShowDuration": 1500, "backgroundColor": "#02080e", "androidScaleType": "CENTER_CROP", "showSpinner": false }, "StatusBar": { "overlaysWebView": true, "style": "DARK" } } }

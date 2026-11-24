@@ -1,0 +1,9 @@
+/* TRON — service worker: PRECARGA COMPLETA para jugar sin conexión (juego, minijuego, iconos). La IA de los NPC necesita red o servidor.
+   Nota: los service workers solo funcionan en https o en localhost; en el APK los archivos ya van dentro de la app. */
+const V = 'tron-grids-v5', ASSETS = ['./.gitignore', './build-config.js', './css/dialogs.css', './css/hud.css', './css/main.css', './css/menus.css', './css/mobile.css', './icons/icon-192.png', './icons/icon-512.png', './index.html', './js/abilities.js', './js/activities.js', './js/ai_direct.js', './js/companions.js', './js/core.js', './js/data/expansion.js', './js/data/interiors.js', './js/data/locations.js', './js/data/npcs.js', './js/data/npcs2.js', './js/data/quests.js', './js/data/story.js', './js/difficulty.js', './js/entities.js', './js/fx.js', './js/gfx_chars.js', './js/gfx_world.js', './js/intro.js', './js/life.js', './js/main.js', './js/market.js', './js/missions.js', './js/multiplayer.js', './js/platform.js', './js/special.js', './js/systems_combat.js', './js/systems_core.js', './js/touch.js', './js/tutorial.js', './js/ui.js', './manifest.webmanifest', './minigames/ghost-ride.html'];
+self.addEventListener('install', (e) => { e.waitUntil(caches.open(V).then((c) => Promise.all(ASSETS.map((a) => c.add(a).catch(() => null)))).then(() => self.skipWaiting())); });
+self.addEventListener('activate', (e) => { e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== V).map((k) => caches.delete(k)))).then(() => self.clients.claim())); });
+self.addEventListener('fetch', (e) => {
+    const u = new URL(e.request.url); if (e.request.method !== 'GET' || u.pathname.startsWith('/api/') || u.origin !== location.origin) return;
+    e.respondWith(caches.match(e.request, { ignoreSearch: true }).then((hit) => hit || fetch(e.request).then((r) => { const cp = r.clone(); caches.open(V).then((c) => c.put(e.request, cp)); return r; }).catch(() => caches.match('./index.html'))));
+});

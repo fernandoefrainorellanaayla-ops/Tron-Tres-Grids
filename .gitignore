@@ -1,0 +1,5 @@
+server/config.json
+server/config.local.bat
+server/config.local.sh
+server/models/
+__pycache__/

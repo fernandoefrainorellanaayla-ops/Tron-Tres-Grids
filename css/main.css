@@ -1,0 +1,50 @@
+/* ==========================================================================
+   TRON · Las Tres Grids — main.css  (base, lienzos, CRT, botones, avisos)
+   ========================================================================== */
+:root {
+    --theme-primary: #00D4FF; --theme-accent: #FF8A00; --theme-danger: #FF4A1A;
+    --panel-bg: rgba(2, 10, 18, 0.74); --panel-line: color-mix(in srgb, var(--theme-primary) 55%, transparent);
+    --font-ui: 'Orbitron', 'Segoe UI', sans-serif; --font-mono: 'Share Tech Mono', 'Consolas', monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; height: 100%; overflow: hidden; background: #000; color: #dff; font-family: var(--font-mono); user-select: none; }
+canvas#game-canvas { position: fixed; inset: 0; width: 100vw; height: 100vh; display: block; cursor: crosshair; }
+canvas#weather-canvas { position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; mix-blend-mode: screen; }
+.hidden { display: none !important; }
+
+/* sutil efecto CRT; más marcado en la era 1982 */
+#crt { position: fixed; inset: 0; pointer-events: none; z-index: 5;
+    background: repeating-linear-gradient(to bottom, rgba(0,0,0,0) 0, rgba(0,0,0,0) 2px, rgba(0,0,0,0.10) 3px, rgba(0,0,0,0) 4px); opacity: .55; }
+body[data-era="1982"] #crt { opacity: 1; background:
+    repeating-linear-gradient(to bottom, rgba(0,0,0,0) 0, rgba(0,0,0,0) 2px, rgba(0,0,0,0.20) 3px, rgba(0,0,0,0) 4px),
+    radial-gradient(ellipse at center, rgba(0,0,0,0) 60%, rgba(0,20,40,.35) 100%); animation: crtflick 5s infinite steps(1); }
+body[data-era="2025"] #crt { opacity: .7; }
+@keyframes crtflick { 0%, 96%, 100% { filter: none; } 97% { filter: brightness(1.25); } 98% { filter: brightness(.9); } }
+
+/* botones */
+.tron-button { font-family: var(--font-ui); font-weight: 600; letter-spacing: .12em; font-size: 13px; color: #fff; cursor: pointer; padding: 11px 22px;
+    background: linear-gradient(180deg, color-mix(in srgb, var(--theme-primary) 22%, transparent), color-mix(in srgb, var(--theme-primary) 6%, transparent));
+    border: 1px solid var(--theme-primary); clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+    text-shadow: 0 0 8px var(--theme-primary); transition: .15s; }
+.tron-button:hover:not(:disabled) { background: color-mix(in srgb, var(--theme-primary) 38%, transparent); box-shadow: 0 0 18px var(--theme-primary); transform: translateY(-1px); }
+.tron-button:disabled { opacity: .4; cursor: not-allowed; }
+.tron-button.small { font-size: 11px; padding: 7px 14px; }
+.tron-button.big { font-size: 15px; padding: 14px 30px; }
+.tron-button.ghost { background: transparent; border-color: color-mix(in srgb, var(--theme-primary) 50%, transparent); }
+.tron-button.special { border-color: #FFD84A; text-shadow: 0 0 8px #FFD84A; background: linear-gradient(180deg, rgba(255,216,74,.22), rgba(255,216,74,.05)); }
+.tron-button small { display: block; font-size: 10px; letter-spacing: .05em; opacity: .75; margin-top: 4px; font-family: var(--font-mono); font-weight: 400; }
+.link-btn { background: none; border: 1px solid var(--panel-line); color: var(--theme-primary); font-family: var(--font-ui); font-size: 10px; cursor: pointer; padding: 1px 6px; }
+.link-btn:hover { background: var(--theme-primary); color: #000; }
+.x-btn { background: transparent; border: 1px solid var(--panel-line); color: #fff; cursor: pointer; padding: 4px 10px; font-family: var(--font-ui); font-size: 12px; }
+.x-btn:hover { background: var(--theme-danger); }
+.icon-btn { background: rgba(0,0,0,.4); border: 1px solid var(--panel-line); color: #fff; cursor: pointer; width: 26px; height: 24px; font-size: 13px; }
+.icon-btn:hover { background: color-mix(in srgb, var(--theme-primary) 35%, transparent); }
+
+/* avisos */
+#toast-container { position: fixed; top: 74px; left: 50%; transform: translateX(-50%); z-index: 60; display: flex; flex-direction: column; gap: 6px; align-items: center; pointer-events: none; max-width: 80vw; }
+.toast { font-family: var(--font-mono); font-size: 14px; padding: 8px 16px; background: rgba(2,10,18,.88); border: 1px solid var(--theme-primary); color: #eaffff;
+    clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%); box-shadow: 0 0 14px color-mix(in srgb, var(--theme-primary) 50%, transparent); animation: tin .25s ease-out; text-align: center; }
+.toast.good { border-color: #7DFF9B; box-shadow: 0 0 14px rgba(125,255,155,.45); } .toast.warn { border-color: #FFD84A; box-shadow: 0 0 14px rgba(255,216,74,.4); } .toast.bad { border-color: #FF4A4A; box-shadow: 0 0 14px rgba(255,74,74,.5); }
+.toast.out { opacity: 0; transform: translateY(-8px); transition: .5s; }
+@keyframes tin { from { opacity: 0; transform: translateY(-10px) scale(.96); } to { opacity: 1; transform: none; } }
+::-webkit-scrollbar { width: 8px; } ::-webkit-scrollbar-thumb { background: var(--panel-line); } ::-webkit-scrollbar-track { background: rgba(0,0,0,.3); }

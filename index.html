@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="theme-color" content="#02080e">
+    <meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    <link rel="stylesheet" href="css/mobile.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRON · Las Tres Grids</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Share+Tech+Mono&display=swap" rel="stylesheet" media="print" onload="this.media='all'"><noscript><link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Share+Tech+Mono&display=swap" rel="stylesheet"></noscript>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/hud.css">
+    <link rel="stylesheet" href="css/menus.css">
+    <link rel="stylesheet" href="css/dialogs.css">
+</head>
+<body data-era="1982">
+    <canvas id="game-canvas"></canvas>
+    <canvas id="weather-canvas"></canvas>
+    <div id="crt"></div>
+
+    <!-- ===================== INTRO: TERMINAL DE JULIAN DILLINGER ===================== -->
+    <div id="terminal-screen" class="hidden">
+        <div class="term-top"><span class="rec">● REC</span><span>DILLINGER SYSTEMS · TERMINAL SEGURA · USUARIO: J. DILLINGER</span><span>SECUENCIA <b id="term-pct">0%</b></span></div>
+        <div class="term-main">
+            <div class="term-left">
+                <div class="term-tabs"><span class="on">julian@dillinger-core:~</span><span>genesis.cfg</span><span>ares.core</span><span class="grow"></span><span class="lang">DILLINGER-SCRIPT</span></div>
+                <div id="term-box"><pre id="term-gutter"></pre><pre id="term-out"></pre></div>
+                <div class="term-status"><span id="term-mode">MODO: MANUAL</span><span>UTF-8</span><span id="term-ln">Ln 1</span></div>
+            </div>
+            <aside class="term-right">
+                <div class="tr-title">ARES · CONSTRUCCIÓN DEL PROGRAMA</div>
+                <canvas id="term-ares" width="340" height="300"></canvas>
+                <div class="meters">
+                    <label>COMPILACIÓN <i><b id="m-comp"></b></i></label><label>INTEGRIDAD <i><b id="m-int"></b></i></label>
+                    <label>MEMORIA <i><b id="m-mem"></b></i></label><label>LÍMITE DE VIDA <em id="m-life">29:00</em></label>
+                </div>
+                <pre id="term-log"></pre>
+            </aside>
+        </div>
+        <div id="term-hint"></div>
+    </div>
+    <button id="intro-skip" class="tron-button small hidden">SALTAR INTRO [Esc]</button>
+
+    <!-- ===================== MENÚ ===================== -->
+    <div id="menu-screen" class="hidden">
+        <div class="menu-box">
+            <div class="logo">TRON</div>
+            <div class="logo-sub">LAS TRES GRIDS</div>
+            <div class="grid-tags"><span>1982</span><span>2010</span><span>2025</span></div>
+            <div class="menu-cols">
+                <div class="menu-left">
+                    <div class="preview-wrap"><canvas id="preview-canvas"></canvas><div class="preview-label">TU PROGRAMA</div></div>
+                </div>
+                <div class="menu-right">
+                    <label class="field"><span>NOMBRE DE USUARIO</span><input id="name-input" type="text" maxlength="16" value="User_Alpha" autocomplete="off"></label>
+                    <div class="field"><span>COLOR DE CIRCUITOS</span><div class="color-row"><div id="color-options"></div><label class="color-custom" title="Elegir cualquier color"><input type="color" id="color-custom" value="#00D4FF"><b>+</b></label></div></div>
+                    <div class="field"><span>FORMA DEL PROGRAMA</span><div id="form-options"></div></div>
+                    <label class="field"><span>DIFICULTAD (sube poco a poco)</span><select id="diff-select"><option value="easy">Fácil</option><option value="normal" selected>Normal</option><option value="hard">Difícil</option></select></label>
+                    <label class="check"><input type="checkbox" id="skip-tutorial"> Omitir el entrenamiento de Julian</label>
+                </div>
+            </div>
+            <div class="menu-buttons">
+                <button id="start-btn" class="tron-button big">ENTRAR A LA GRID</button>
+                <button id="continue-btn" class="tron-button big ghost" style="display:none">CONTINUAR</button>
+            </div>
+            <div class="ai-line"><span id="ai-status" class="off">Comprobando IA…</span><button id="ai-retry" class="link-btn" title="Volver a comprobar">↻</button><button id="ai-settings" class="link-btn" title="Ajustes de IA (clave propia / servidor)">⚙</button></div>
+            <div class="menu-help">WASD mover · Clic/Espacio disco · Clic der. 2º disco · E interactuar · V ciclo / Solar Sailer · Q misiones · M atlas · I mejoras · 1-4 consumibles · X sonido · B bloom</div>
+        </div>
+    </div>
+
+    <!-- ===================== HUD ===================== -->
+    <div id="hud">
+        <div id="hud-left">
+            <div class="panel">
+                <div class="row"><span id="player-name" class="pname">User</span><span id="mode-text" class="tag">A PIE</span></div>
+                <div class="bar"><div id="health-fill"></div><span id="health-text">100/100</span></div>
+                <div id="charge-wrap" style="display:none"><div class="bar charge"><div id="charge-fill"></div><span>CARGA ESTÁTICA</span></div></div>
+                <div class="row small"><span>◈ BITS</span><b id="bits-count">0</b></div>
+                <div id="diff-line" class="stats-line"></div>
+                <div id="stats-line" class="stats-line"></div>
+            </div>
+            <div class="panel">
+                <div class="panel-title">HABILIDADES</div>
+                <div id="skills-list"></div>
+            </div>
+            <div class="panel" id="quest-tracker">
+                <div class="panel-title">MISIONES <button id="btn-quests" class="link-btn" title="Abrir diario [Q]">Q</button></div>
+                <div id="quest-tracker-list"></div>
+            </div>
+        </div>
+        <div id="hud-right">
+            <div class="panel mm-panel">
+                <div class="row"><span id="grid-name" class="tag">ENCOM 1982</span><span class="mm-btns">
+                    <button id="btn-market" class="icon-btn" title="Terminal de Mejoras [I]">🛒</button>
+                    <button id="btn-ai" class="icon-btn" title="Ajustes de IA">⚙</button>
+                    <button id="btn-mp" class="icon-btn" title="Multijugador [O]">🌐</button>
+                    <button id="btn-atlas" class="icon-btn" title="Atlas [M]">🗺</button>
+                    <button id="btn-save" class="icon-btn" title="Guardar">💾</button>
+                    <button id="btn-mute" class="icon-btn" title="Sonido [X]">🔊</button></span></div>
+                <canvas id="minimap" width="200" height="200"></canvas>
+                <div id="loc-text" class="loc">Grid abierta</div>
+            </div>
+        </div>
+        <div id="ability-bar"></div>
+        <div id="items-bar"></div>
+        <div id="banner" style="display:none"></div>
+        <div id="hud-bottom">
+            <div id="interact-prompt" style="display:none"></div>
+            <div class="discs"><span id="disc1" class="disc ready">◉</span><span id="disc2" class="disc ready" style="display:none">◉</span></div>
+        </div>
+    </div>
+
+    <!-- ===================== ENTRENAMIENTO: PANEL DE JULIAN ===================== -->
+    <div id="julian-panel" class="hidden">
+        <div class="jp-head"><span class="rec">● J. DILLINGER · ENTRENANDO A TU PROGRAMA</span><span id="jp-step">ENTRENAMIENTO</span><button id="jp-skip" class="link-btn">SALTAR</button></div>
+        <pre id="jp-code"></pre>
+        <div id="jp-say"></div>
+        <div id="jp-progress"></div>
+        <button id="jp-go" class="tron-button hidden">ENTRAR A LA GRID</button>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <!-- ===================== DIÁLOGO ===================== -->
+    <div id="dialogue-modal" class="modal hidden">
+        <div class="dlg-box">
+            <div class="dlg-head">
+                <div id="dlg-avatar" class="avatar"></div>
+                <div class="dlg-who"><div id="dlg-name"></div><div id="dlg-role"></div><div id="dlg-src"></div></div>
+                <button id="dlg-close" class="x-btn">✕</button>
+            </div>
+            <div id="dlg-log"></div>
+            <div id="dlg-actions"></div>
+            <div class="dlg-input-row"><input id="dlg-input" type="text" maxlength="240" placeholder="Escribe un mensaje al programa…" autocomplete="off"><button id="dlg-send" class="tron-button small">ENVIAR</button></div>
+            <div id="dlg-status"></div>
+        </div>
+    </div>
+
+    <!-- ===================== TIENDA ===================== -->
+    <div id="shop-modal" class="modal hidden">
+        <div class="box">
+            <h2 id="shop-title">TIENDA</h2>
+            <div class="shop-bits">◈ <b id="shop-bits">0</b> BITS</div>
+            <div id="shop-items"></div>
+            <button id="shop-close" class="tron-button">CERRAR</button>
+        </div>
+    </div>
+
+    <!-- ===================== MISIONES ===================== -->
+    <div id="quest-modal" class="modal hidden">
+        <div class="box wide">
+            <h2>DIARIO DE MISIONES</h2>
+            <div id="quest-list" class="scroll"></div>
+            <button id="quest-close" class="tron-button">CERRAR [Esc]</button>
+        </div>
+    </div>
+
+    <!-- ===================== ATLAS ===================== -->
+    <div id="atlas-modal" class="modal hidden">
+        <div class="box wide">
+            <h2>ATLAS DE LAS GRIDS</h2>
+            <div id="atlas-tabs"><button data-tab="places" class="on">LUGARES</button><button data-tab="npcs">PERSONAJES</button></div>
+            <div id="atlas-count"></div>
+            <div id="atlas-list" class="scroll"></div>
+            <button id="atlas-close" class="tron-button">CERRAR [Esc]</button>
+        </div>
+    </div>
+
+    <!-- ===================== ARENA ===================== -->
+    <div id="arena-modal" class="modal hidden">
+        <div class="box">
+            <h2 id="arena-title">ARENA</h2>
+            <p id="arena-desc" class="dim"></p>
+            <div id="bet-row"><span>APUESTA</span><button data-bet="0" class="on">Ninguna</button><button data-bet="50">50 ◈</button><button data-bet="100">100 ◈</button><button data-bet="250">250 ◈</button></div>
+            <p class="dim bet-note">Si ganas recibes el doble de lo apostado. Si pierdes o abandonas, lo pierdes.</p>
+            <div class="arena-btns">
+                <button id="arena-disc" class="tron-button big">⚔ DUELO DE DISCOS<small>3 oleadas · +200 bits</small></button>
+                <button id="arena-cycle" class="tron-button big">🏍 BATALLA DE CICLOS<small>Arena grande · giros de 90° · +250 bits</small></button>
+                <button id="arena-free" class="tron-button big">🌀 BATALLA LIBRE<small>Estelas que se desvanecen · +300 bits</small></button>
+                <button id="arena-tank" class="tron-button big">🛡 BATALLA DE TANQUES<small>3 oleadas · +230 bits</small></button>
+                <button id="arena-race" class="tron-button big">🏁 COMPETIR EN LA CARRERA<small id="arena-race-sub"></small></button>
+            </div>
+            <button id="arena-close" class="tron-button ghost">CANCELAR</button>
+        </div>
+    </div>
+
+    <!-- ===================== TERMINAL DE MEJORAS (economía) ===================== -->
+    <div id="market-modal" class="modal hidden">
+        <div class="box wide market">
+            <h2>TERMINAL DE MEJORAS</h2>
+            <div class="mk-top"><span>◈ <b id="mk-bits">0</b> BITS</span><span id="mk-deal"></span></div>
+            <div id="mk-tabs"><button data-tab="upgrades" class="on">MEJORAS</button><button data-tab="style">ESTILO</button><button data-tab="items">CONSUMIBLES</button><button data-tab="stats">ESTADÍSTICAS</button></div>
+            <div id="mk-list" class="scroll"></div>
+            <button id="mk-close" class="tron-button">CERRAR [Esc]</button>
+        </div>
+    </div>
+
+    <!-- ===================== MULTIJUGADOR ===================== -->
+    <div id="mp-modal" class="modal hidden"><div class="box wide"><h2>🌐 MULTIJUGADOR · CROSSPLAY</h2><p id="mp-status" class="dim"></p>
+        <div id="mp-conn"><p class="dim">PC y teléfono pueden jugar juntos: uno crea la sala y el otro entra con el código. Ambos deben poder llegar al servidor (misma Wi-Fi con <code>--lan</code>, o un túnel).</p>
+            <label class="field"><span>DIRECCIÓN DEL SERVIDOR DE MULTIJUGADOR</span><input id="mp-url" type="text" placeholder="ws://192.168.1.20:8766"></label>
+            <div class="ct-go"><input id="mp-code" type="text" maxlength="5" placeholder="CÓDIGO" style="flex:1;text-transform:uppercase"><button id="mp-join" class="tron-button small">UNIRSE</button><button id="mp-create" class="tron-button small">CREAR SALA</button></div></div>
+        <div id="mp-room" style="display:none"><p>Código de sala: <b id="mp-code-big" style="font-size:22px;letter-spacing:.3em;color:#FFD84A"></b></p>
+            <div id="mp-players" class="scroll"></div><div id="mp-chat" class="mp-chat"></div>
+            <div class="ct-go"><input id="mp-text" type="text" maxlength="120" placeholder="Escribe un mensaje…" style="flex:1"><button id="mp-send" class="tron-button small">ENVIAR</button></div>
+            <div id="mp-emotes" class="mp-emotes"><button class="tron-button small ghost" data-e="👋">👋</button><button class="tron-button small ghost" data-e="😀">😀</button><button class="tron-button small ghost" data-e="🏁">🏁</button><button class="tron-button small ghost" data-e="⚔">⚔</button><button class="tron-button small ghost" data-e="❤">❤</button></div>
+            <button id="mp-leave" class="tron-button small ghost">SALIR DE LA SALA</button></div>
+        <button id="mp-close" class="tron-button">CERRAR [Esc]</button></div></div>
+    <!-- ===================== ARRESTO ===================== -->
+    <div id="arrest-modal" class="modal hidden"><div class="box"><h2>🚨 ARRESTADO</h2><p id="arrest-why" class="dim"></p><p>La Guardia te tiene retenido. Puedes <b>pagar la multa</b> (<span id="arrest-fine"></span>) y salir, o aceptar la <b>anulación</b>: pierdes el 20% de tus bits y vuelves al punto de inicio.</p>
+        <div class="row-btns"><button id="arrest-pay" class="tron-button">PAGAR LA MULTA</button><button id="arrest-annul" class="tron-button ghost">ACEPTAR LA ANULACIÓN</button></div></div></div>
+    <!-- ===================== AJUSTES DE IA (alternativa sin Python) ===================== -->
+    <div id="ai-modal" class="modal hidden"><div class="box wide"><h2>AJUSTES DE IA DE LOS NPC</h2>
+        <p class="dim">Elige cómo hablan los NPC. «Servidor»: el servidor Python (en tu PC o en la red). «Directo»: tu propia clave de API, sin Python (ideal para teléfono). La clave se guarda solo en este dispositivo.</p>
+        <label class="field"><span>MODO</span><select id="ai-mode"><option value="server">Servidor (Python)</option><option value="direct">Directo (clave propia)</option></select></label>
+        <div id="ai-server-box"><label class="field"><span>URL DEL SERVIDOR (opcional, p. ej. http://192.168.1.20:8765)</span><input id="ai-base" type="text" placeholder="vacío = automático"></label></div>
+        <div id="ai-direct-box"><label class="field"><span>PROVEEDOR</span><select id="ai-provider"><option value="gemini">Google Gemini</option><option value="openai">OpenAI</option><option value="deepseek">DeepSeek</option><option value="anthropic">Anthropic (Claude)</option></select></label>
+        <label class="field"><span>CLAVE DE API</span><input id="ai-key" type="password" autocomplete="off" placeholder="pega tu clave"></label>
+        <label class="field"><span>MODELO (opcional)</span><input id="ai-model" type="text" placeholder="gemini-2.5-flash"></label></div>
+        <p id="ai-result" class="dim"></p>
+        <div class="row-btns"><button id="ai-test" class="tron-button small">PROBAR</button><button id="ai-save" class="tron-button small">GUARDAR</button><button id="ai-close" class="tron-button small ghost">CERRAR</button></div></div></div>
+    <!-- ===================== CONTACTOS (compañeros) ===================== -->
+    <div id="contacts-modal" class="modal hidden"><div class="box wide"><h2>CONTACTOS · AMIGOS</h2><p class="dim">Invita hasta 2 amigos. Te siguen, luchan contigo y puedes ir a un lugar juntos.</p>
+        <div id="contacts-list" class="scroll"></div>
+        <div class="ct-go"><select id="contacts-place"></select><button id="contacts-go" class="tron-button small">IR JUNTOS</button></div>
+        <button id="contacts-close" class="tron-button">CERRAR [Esc]</button></div></div>
+    <!-- ===================== DISCO DE SALTO ===================== -->
+    <div id="portal-modal" class="modal hidden"><div class="box"><h2>DISCO DE SALTO</h2><p id="portal-charges" class="dim"></p><div id="portal-list" class="portal-list"></div><button id="portal-close" class="tron-button ghost">CERRAR [Esc]</button></div></div>
+    <!-- ===================== CONTROL DE PROCESOS (Mr. R) ===================== -->
+    <div id="process-modal" class="modal hidden"><div class="box wide"><h2>CONTROL DE PROCESOS · MR. R</h2><p class="dim">Mantén el nivel del tanque dentro de la banda de consigna con la apertura de la válvula. El caudal de entrada cambia solo.</p>
+        <canvas id="proc-canvas" width="520" height="290"></canvas><label class="field"><span>APERTURA DE LA VÁLVULA</span><input id="proc-valve" type="range" min="0" max="100" value="50"></label>
+        <button id="process-close" class="tron-button ghost">ABANDONAR</button></div></div>
+    <!-- ===================== PUZZLE (Mr. L) ===================== -->
+    <div id="puzzle-modal" class="modal hidden">
+        <div class="box">
+            <h2 id="puzzle-title">DESAFÍO</h2>
+            <div id="puzzle-progress" class="dim"></div>
+            <p id="puzzle-q"></p>
+            <div id="puzzle-opts"></div>
+            <div id="puzzle-feedback"></div>
+            <button id="puzzle-quit" class="tron-button ghost">SALIR</button>
+        </div>
+    </div>
+
+    <!-- ===================== REVELACIÓN / RECOMPENSA ===================== -->
+    <div id="reveal-modal" class="modal hidden">
+        <div class="box reveal">
+            <div id="reveal-kicker"></div>
+            <h2 id="reveal-title"></h2>
+            <div id="reveal-body"></div>
+            <div class="reveal-btns"><button id="reveal-close" class="tron-button big">CONTINUAR</button><button id="reveal-secondary" class="tron-button ghost" style="display:none"></button></div>
+        </div>
+    </div>
+
+    <!-- ===================== MINIJUEGO (panel de respaldo) ===================== -->
+    <div id="minigame-overlay" class="modal hidden">
+        <div class="mg-box">
+            <button id="minigame-close" class="x-btn">✕ SALIR</button>
+            <iframe id="minigame-frame" title="La Última Cabalgata" src="about:blank"></iframe>
+        </div>
+    </div>
+
+    <script src="build-config.js"></script>
+    <script src="js/platform.js"></script>
+    <script src="js/core.js"></script>
+    <script src="js/data/locations.js"></script>
+    <script src="js/data/expansion.js"></script>
+    <script src="js/data/interiors.js"></script>
+    <script src="js/data/npcs.js"></script>
+    <script src="js/data/npcs2.js"></script>
+    <script src="js/data/quests.js"></script>
+    <script src="js/difficulty.js"></script>
+    <script src="js/data/story.js"></script>
+    <script src="js/gfx_chars.js"></script>
+    <script src="js/gfx_world.js"></script>
+    <script src="js/fx.js"></script>
+    <script src="js/entities.js"></script>
+    <script src="js/systems_combat.js"></script>
+    <script src="js/systems_core.js"></script>
+    <script src="js/missions.js"></script>
+    <script src="js/activities.js"></script>
+    <script src="js/life.js"></script>
+    <script src="js/multiplayer.js"></script>
+    <script src="js/companions.js"></script>
+    <script src="js/abilities.js"></script>
+    <script src="js/special.js"></script>
+    <script src="js/market.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/intro.js"></script>
+    <script src="js/tutorial.js"></script>
+    <script src="js/ai_direct.js"></script>
+    <script src="js/touch.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

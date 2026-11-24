@@ -1,0 +1,69 @@
+/* TRON — mobile.css: solo aplica en dispositivos táctiles (html.touch) */
+#touch-ui { display: none; }
+html.touch, html.touch body { touch-action: none; overscroll-behavior: none; -webkit-user-select: none; user-select: none; }
+html.touch #touch-ui { display: block; position: fixed; inset: 0; z-index: 60; pointer-events: none; }
+html.touch #touch-ui button, html.touch #tj-base { pointer-events: auto; }
+#tj-base { position: absolute; left: max(22px, env(safe-area-inset-left)); bottom: 22px; width: 132px; height: 132px; border-radius: 50%; border: 2px solid rgba(0,212,255,.55); background: radial-gradient(circle, rgba(0,212,255,.10), rgba(0,0,0,.25)); box-shadow: 0 0 18px rgba(0,212,255,.25); touch-action: none; }
+#tj-knob { position: absolute; left: 50%; top: 50%; width: 62px; height: 62px; margin: -31px 0 0 -31px; border-radius: 50%; background: rgba(0,212,255,.35); border: 2px solid #8ff; box-shadow: 0 0 14px #19f0ff; }
+#tb-right { position: absolute; right: max(14px, env(safe-area-inset-right)); bottom: 16px; display: grid; grid-template-columns: repeat(3, 50px); gap: 6px; align-items: center; justify-items: center; }
+.tb { min-width: 50px; height: 44px; padding: 0 8px; border: 2px solid rgba(0,212,255,.6); background: rgba(2,10,16,.62); color: #cffaff; font: 700 12px Orbitron, sans-serif; letter-spacing: .06em; border-radius: 12px; touch-action: none; } .tb.on { background: rgba(0,212,255,.45); color: #fff; }
+.tb.big { grid-column: span 3; width: 100%; height: 56px; font-size: 15px; border-color: #FFD84A; color: #FFD84A; } .tb.sm { min-width: 42px; height: 36px; font-size: 13px; padding: 0 6px; }
+#tb-top { position: absolute; top: 6px; left: 50%; transform: translateX(-50%); display: flex; gap: 5px; z-index: 5; } #tb-top .tb { height: 32px; font-size: 11px; } #tb-items { position: absolute; left: max(26px, env(safe-area-inset-left)); bottom: 162px; display: flex; gap: 5px; } #tb-items .tb { min-width: 34px; height: 30px; font-size: 12px; padding: 0 4px; }
+html.touch #intro-skip { bottom: 70px; }
+
+/* =================================================================================
+   DISEÑO PROPIO PARA TELÉFONO (horizontal). Todo se reorganiza para que quepa sin encimarse.
+   ================================================================================= */
+html.touch { font-size: 14px; }
+/* ---- MENÚ: dos columnas compactas, botón de entrar siempre visible ---- */
+html.touch #menu-screen { align-items: flex-start; overflow-y: auto; padding: 6px 8px; }
+html.touch .menu-box { width: min(900px, 98vw); max-height: none; padding: 6px 14px 0; overflow: visible; }
+html.touch .menu-box .logo { font-size: 24px; letter-spacing: .25em; margin: 0; line-height: 1.1; }
+html.touch .menu-box .logo-sub { font-size: 9px; margin: 0 0 4px; letter-spacing: .3em; }
+html.touch .grid-tags, html.touch .menu-help { display: none; }
+html.touch .menu-cols { display: flex; gap: 14px; align-items: stretch; margin: 0; }
+html.touch .menu-left { width: 30%; min-width: 130px; } html.touch .preview-wrap { height: 100%; min-height: 150px; } html.touch #preview-canvas { width: 100%; height: 100%; max-height: 190px; }
+html.touch .menu-right { flex: 1; min-width: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 4px 12px; align-content: start; }
+html.touch .menu-right .field { margin: 0; } html.touch .menu-right .field > span { font-size: 8px; margin-bottom: 2px; letter-spacing: .12em; }
+html.touch .menu-right .field:nth-child(2), html.touch .menu-right .field:nth-child(3) { grid-column: span 2; }
+html.touch #name-input, html.touch #menu-screen select { height: 30px; padding: 3px 8px; font-size: 13px; }
+html.touch #color-options > *, html.touch .color-custom { width: 22px; height: 22px; } html.touch .color-row { gap: 6px; }
+html.touch #form-options { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; } html.touch #form-options > * { padding: 4px 2px; font-size: 9px; min-height: 28px; text-align: center; }
+html.touch .menu-right .check { grid-column: span 2; font-size: 12px; margin-top: 2px; }
+html.touch .menu-right .field:nth-child(4) { margin-top: 6px; }
+html.touch .menu-buttons { position: sticky; bottom: 0; z-index: 3; display: flex; gap: 8px; padding: 6px 0 4px; background: linear-gradient(0deg, rgba(2,10,16,.97) 70%, rgba(2,10,16,0)); }
+html.touch .menu-buttons .tron-button { flex: 1; height: 40px; font-size: 13px; padding: 0 10px; margin: 0; }
+html.touch .ai-line { font-size: 10px; margin: 0 0 4px; }
+/* ---- AVISOS: pequeños, a un lado, máximo 3 ---- */
+html.touch #toast-container { top: 46px; left: 50%; transform: translateX(-50%); align-items: center; max-width: 42vw; gap: 4px; pointer-events: none; }
+html.touch .toast { font-size: 11px; padding: 4px 9px; max-width: 42vw; text-align: center; line-height: 1.25; border-radius: 3px; }
+html.touch #toast-container .toast:nth-child(n+4) { display: none; }
+/* ---- HUD ---- */
+html.touch #hud-left { transform: scale(.74); transform-origin: top left; top: 42px; left: 4px; }
+html.touch #hud-right { transform: scale(.5); transform-origin: top right; top: 40px; right: 4px; }
+html.touch #quest-tracker, html.touch #ability-bar, html.touch #items-bar { display: none; }
+html.touch #interact-prompt { bottom: 150px; font-size: 12px; padding: 6px 12px; }
+html.touch #tb-items { bottom: 164px; }
+/* ---- VENTANAS: toda la ventana se desplaza; el botón de cerrar queda fijo abajo ---- */
+html.touch .modal .box, html.touch .box { width: min(96vw, 780px); max-height: 94vh; overflow-y: auto; padding: 10px 16px; gap: 6px; }
+html.touch .box h2 { font-size: 15px; margin: 0 0 2px; letter-spacing: .14em; } html.touch .box p { font-size: 12px; line-height: 1.4; margin: 2px 0; }
+html.touch .box .scroll { max-height: none !important; overflow: visible; padding-right: 0; }
+html.touch .box > .tron-button:last-child, html.touch .box > .row-btns { position: sticky; bottom: -10px; z-index: 4; background: linear-gradient(0deg, rgba(2,10,18,.98) 70%, rgba(2,10,18,0)); padding-top: 8px; }
+html.touch .tron-button { min-height: 38px; font-size: 12px; }
+html.touch .portal-list { grid-template-columns: 1fr; }
+/* ---- DIÁLOGO con NPC: ocupa casi toda la pantalla ---- */
+html.touch #dialogue-modal .box, html.touch #dialogue-modal > div { width: 96vw; max-height: 96vh; }
+html.touch #dlg-log { padding: 8px 10px; font-size: 12px; } html.touch #dlg-actions .tron-button { min-height: 30px; font-size: 10px; padding: 0 8px; }
+html.touch #dlg-input { height: 34px; font-size: 14px; }
+/* ---- tutorial de Julian: abajo al centro, entre el joystick y los botones ---- */
+html.touch #julian-panel { position: fixed !important; top: auto !important; right: auto !important; left: 50% !important; bottom: 6px !important; transform: translateX(-50%) !important; width: min(46vw, 420px) !important; max-height: 40vh; overflow-y: auto; font-size: 11px; padding: 6px 10px; }
+html.touch #julian-panel p, html.touch #julian-panel .jp-text { font-size: 11px; line-height: 1.35; }
+@media (max-width: 760px) { html.touch #form-options { grid-template-columns: repeat(3, 1fr); } html.touch .menu-left { width: 26%; } }
+
+/* ---- minijuego de Mr. U a pantalla completa ---- */
+html.touch .mg-box { width: 100vw !important; height: 100vh !important; border: 0 !important; max-width: none; }
+html.touch #minigame-overlay { padding: 0; } html.touch #minigame-overlay .x-btn { top: 6px; right: 6px; min-height: 40px; z-index: 5; }
+
+html.touch #act-hud { top: 46px; } html.touch #act-hud .ah-top { font-size: 11px; padding: 4px 10px; gap: 10px; } html.touch #ah-msg.big { font-size: 56px; margin-top: 30px; }
+
+html.touch #alerts { top: 150px; right: 6px; width: 190px; } html.touch #alerts .al { font-size: 10px; padding: 4px 7px; }

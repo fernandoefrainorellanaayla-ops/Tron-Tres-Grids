@@ -1,0 +1,11 @@
+{
+  "provider": "auto",
+  "max_tokens": 150,
+  "temperature": 0.8,
+  "allow_file_origin": true,
+
+  "anthropic":     { "model": "claude-haiku-5-5", "api_key_env": "ANTHROPIC_API_KEY" },
+  "gemini":        { "model": "gemini-flash-lite-latest", "api_key_env": "GEMINI_API_KEY" },
+  "openai_compat": { "base_url": "https://api.deepseek.com", "model": "deepseek-chat", "api_key_env": "DEEPSEEK_API_KEY" },
+  "llama_cpp":     { "model_path": "server/models/Qwen2.5-1.5B-Instruct-Q4_K_M.gguf", "n_ctx": 2048, "n_threads": 0 }
+}

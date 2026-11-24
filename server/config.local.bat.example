@@ -1,0 +1,9 @@
+@echo off
+REM Copia este archivo como  server\config.local.bat  y descomenta UNA línea con tu clave.
+REM iniciar.bat lo carga solo. NO compartas ni subas config.local.bat a internet.
+
+REM --- IA en la nube (elige una) ---
+REM set GEMINI_API_KEY=pega_aqui_tu_clave
+REM set ANTHROPIC_API_KEY=pega_aqui_tu_clave
+REM set DEEPSEEK_API_KEY=pega_aqui_tu_clave
+REM set OPENAI_API_KEY=pega_aqui_tu_clave
